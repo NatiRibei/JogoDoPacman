@@ -1,6 +1,7 @@
 var pacman, fantasma, obstaculo1, obstaculo2, obstaculo3;
 var pills, pontos, edges;
 var pacmananime, fantasmaanime, obsanime1, obsanime2, obsanime3,obsanime4;
+var somComer, somMorrer, somGanhar;
 var TotPontos = 0;
 var pontuacao = 0;
 var ComerPontos = 0;
@@ -22,7 +23,7 @@ function setup(){
   pacman = createSprite(20, 20);
   pacman.addAnimation('pacmananime', "pacman1.png","pacman6.png");
   pacman.scale = 0.12;
-  pacman.setCollider('circle',0,0,200);
+  pacman.setCollider('circle',0,0,100);
 
   fantasma = createSprite(380, 20);
   fantasma.addAnimation("fantasmaanime", "fantasma.png");
@@ -42,6 +43,11 @@ function setup(){
   obstaculo4.addAnimation("obsanime4","obstaculo3.png");
   obstaculo4.scale = 0.5;
       
+  //adicionando som
+  soundFormats('mp3', 'ogg');
+  somComer = loadSound("Apple-Bite");
+  somMorrer = loadSound ("Death");
+  somGanhar = loadSound ("you_win_female");
   //criando pontos comprimidos
   pills = new Group();
 
@@ -134,7 +140,7 @@ function draw()
       pills.get(i).destroy();
       pontuacao = pontuacao + 50;
       ComerPontos++;
-      //playSound("Apple-Bite.mp3", false);
+      somComer.play();
     }
   }
   //mostrar pontuação na tela  
@@ -147,6 +153,7 @@ function draw()
     sucesso.scale = 1;
     pacman.destroy();
     fantasma.destroy();
+    //somGanhar.play();
   }
   
     pacman.collide(obstaculo1);
@@ -160,6 +167,7 @@ function draw()
     fantasma.destroy();
     var fimDeJogo = createSprite(200, 200);
     fimDeJogo.addAnimation("perdeu","fimdejogo.png");
+    somMorrer.play();
   }
   if (fantasma.isTouching(edges))
   {
